@@ -30,7 +30,7 @@ steps:
     type: "build"
     image_name: "mytest"
     tag: "master"
-    dockerfile: "Dockerfile.testing"
+    dockerfile: "Dockerfile.test"
     stage: test
   run_integration_tests:
     title: "Running integration tests"
