@@ -15,11 +15,6 @@ class TestInteface(unittest.TestCase):
         time.sleep(1)
         r = requests.get(f'http://myclient:9998/')
         self.assertEqual(secret, int(r.content))
-        
-    def test_failure(self):
-
-        raise Exception()
-    
 
 if __name__ == "__main__":
     test = TestInteface()
