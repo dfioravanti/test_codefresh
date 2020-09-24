@@ -53,4 +53,4 @@ steps:
         periodSeconds: 15
         image: byrnedo/alpine-curl
         commands:
-          - "curl myclient:9998"
+          - "curl http://myclient:8080"
