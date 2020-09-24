@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  myclient:
+    image: myclient
+    ports:
+      - 9998:9998
+    networks:
+      - backend
+
+  myserver:
+    image: myserver
+    ports:
+      - 9999:9999
+    networks:
+      - backend
+      
+networks:
+  backend:

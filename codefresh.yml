@@ -1,0 +1,56 @@
+version: "1.0"
+stages:
+  - prepare
+  - build
+  - test
+steps:
+  main_clone:
+    type: "git-clone"
+    description: "Cloning main repository..."
+    repo: "dfioravanti/test_codefresh"
+    revision: "master"
+    git: github
+    stage: prepare
+  build_server_image:
+    title: "Building Server Image"
+    type: "build"
+    image_name: "myserver"
+    tag: "master"
+    dockerfile: "Dockerfile.server"
+    stage: build
+  build_client_image:
+    title: "Building client Image"
+    type: "build"
+    image_name: "myclient"
+    tag: "master"
+    dockerfile: "Dockerfile.client"
+    stage: build
+  build_test_image:
+    title: "Building Docker Test Image"
+    type: "build"
+    image_name: "mytest"
+    tag: "master"
+    dockerfile: "Dockerfile.testing"
+    stage: test
+  run_integration_tests:
+    title: "Running integration tests"
+    stage: test
+    image: '${{build_test_image}}'
+    commands:
+      - python -m unittest discover ./tests
+    services:
+      composition:
+        myserver:
+          image: '${{build_server_image}}'
+          ports:
+            - 9999
+        myclient:
+          image: '${{build_client_image}}'
+          ports:
+            - 9998
+      readiness:
+        timeoutSeconds: 30
+        periodSeconds: 15
+        image: byrnedo/alpine-curl
+        commands:
+          - "curl myclient:8080"
